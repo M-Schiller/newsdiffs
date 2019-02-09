@@ -13,8 +13,10 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('url', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255, db_index=True)),
             ('initial_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('last_update', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(1901, 1, 1, 0, 0))),
-            ('last_check', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(1901, 1, 1, 0, 0))),
+            ('last_update',
+             self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(1901, 1, 1, 0, 0))),
+            ('last_check',
+             self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(1901, 1, 1, 0, 0))),
         ))
         db.send_create_signal('frontend', ['Article'])
 
@@ -42,7 +44,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('frontend', ['Upvote'])
 
-
     def backwards(self, orm):
         # Deleting model 'Article'
         db.delete_table('Articles')
@@ -53,15 +54,17 @@ class Migration(SchemaMigration):
         # Deleting model 'Upvote'
         db.delete_table('upvotes')
 
-
     models = {
         'frontend.article': {
             'Meta': {'object_name': 'Article', 'db_table': "'Articles'"},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'initial_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'last_check': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(1901, 1, 1, 0, 0)'}),
-            'last_update': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(1901, 1, 1, 0, 0)'}),
-            'url': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'})
+            'last_check': (
+            'django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(1901, 1, 1, 0, 0)'}),
+            'last_update': (
+            'django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(1901, 1, 1, 0, 0)'}),
+            'url': (
+            'django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'})
         },
         'frontend.upvote': {
             'Meta': {'object_name': 'Upvote', 'db_table': "'upvotes'"},

@@ -8,14 +8,16 @@ from django.db import models, IntegrityError
 
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(THIS_DIR))
-GIT_DIR = ROOT_DIR+'/articles/'
+GIT_DIR = ROOT_DIR + '/articles/'
 
 GIT_PROGRAM = 'git'
+
 
 def strip_prefix(string, prefix):
     if string.startswith(prefix):
         string = string[len(prefix):]
     return string
+
 
 PublicationDict = {'www.nytimes.com': 'NYT',
                    'edition.cnn.com': 'CNN',
@@ -25,6 +27,7 @@ PublicationDict = {'www.nytimes.com': 'NYT',
                    }
 
 ancient = datetime(1901, 1, 1)
+
 
 # Create your models here.
 class Article(models.Model):
@@ -66,11 +69,12 @@ class Article(models.Model):
 
     def minutes_since_update(self):
         delta = datetime.now() - max(self.last_update, self.initial_date)
-        return delta.seconds // 60 + 24*60*delta.days
+        return delta.seconds // 60 + 24 * 60 * delta.days
 
     def minutes_since_check(self):
         delta = datetime.now() - self.last_check
-        return delta.seconds // 60 + 24*60*delta.days
+        return delta.seconds // 60 + 24 * 60 * delta.days
+
 
 class Version(models.Model):
     class Meta:
@@ -80,7 +84,7 @@ class Version(models.Model):
     article = models.ForeignKey('Article', null=False)
     v = models.CharField(max_length=255, blank=False, unique=True)
     title = models.CharField(max_length=255, blank=False)
-    byline = models.CharField(max_length=255,blank=False)
+    byline = models.CharField(max_length=255, blank=False)
     date = models.DateTimeField(blank=False)
     boring = models.BooleanField(blank=False, default=False)
     diff_json = models.CharField(max_length=255, null=True)
@@ -88,7 +92,7 @@ class Version(models.Model):
     def text(self):
         try:
             return subprocess.check_output([GIT_PROGRAM, 'show',
-                                            self.v+':'+self.article.filename()],
+                                            self.v + ':' + self.article.filename()],
                                            cwd=self.article.full_git_dir)
         except subprocess.CalledProcessError as e:
             return None
@@ -97,11 +101,13 @@ class Version(models.Model):
         if self.diff_json is None:
             return {}
         return json.loads(self.diff_json)
+
     def set_diff_info(self, val=None):
         if val is None:
             self.diff_json = None
         else:
             self.diff_json = json.dumps(val)
+
     diff_info = property(get_diff_info, set_diff_info)
 
 
@@ -150,6 +156,7 @@ def check_output(*popenargs, **kwargs):
             cmd = popenargs[0]
         raise CalledProcessError(retcode, cmd, output=output)
     return output
+
 
 if not hasattr(subprocess, 'check_output'):
     subprocess.check_output = check_output

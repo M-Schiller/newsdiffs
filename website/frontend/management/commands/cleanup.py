@@ -9,26 +9,27 @@ import traceback
 import time
 import scraper
 
-GIT_PROGRAM='git'
+GIT_PROGRAM = 'git'
 
 from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
 
+
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--migrate',
-            action='store_true',
-            default=False,
-            help='Recreate version + article database from git repo'),
+                    action='store_true',
+                    default=False,
+                    help='Recreate version + article database from git repo'),
         make_option('--remove-duplicates',
-            action='store_true',
-            default=False,
-            help='Mark versions that appear multiple times in git repo as boring'),
+                    action='store_true',
+                    default=False,
+                    help='Mark versions that appear multiple times in git repo as boring'),
         make_option('--mark-boring',
-            action='store_true',
-            default=False,
-            help='Look through versions to mark boring ones'),
-        )
+                    action='store_true',
+                    default=False,
+                    help='Look through versions to mark boring ones'),
+    )
     help = '''Modify versions in git repo
 
 Articles that haven't changed in a while are skipped if we've
@@ -63,7 +64,7 @@ def migrate_versions():
         date = datetime.strptime(' '.join(datestr.split()[1:-1]),
                                  '%a %b %d %H:%M:%S %Y')
 
-        if not os.path.exists(os.path.join(models.GIT_DIR,fname)): #file introduced accidentally
+        if not os.path.exists(os.path.join(models.GIT_DIR, fname)):  # file introduced accidentally
             continue
 
         url = 'http://%s' % fname
@@ -78,27 +79,27 @@ def migrate_versions():
                 article = models.Article(url=url,
                                          last_update=date,
                                          last_check=date)
-                if not article.publication(): #blogs aren't actually reasonable
+                if not article.publication():  # blogs aren't actually reasonable
                     continue
 
                 article.save()
 
-
         text = subprocess.check_output([GIT_PROGRAM, 'show',
-                                        v+':'+fname],
+                                        v + ':' + fname],
                                        cwd=models.GIT_DIR)
         text = text.decode('utf-8')
         (date2, title, byline) = text.splitlines()[:3]
 
         boring = False
 
-        print '%d/%d' % (i,len(commits)), url, v, date, title, byline, boring
+        print '%d/%d' % (i, len(commits)), url, v, date, title, byline, boring
         v = models.Version(article=article, v=v, date=date, title=title,
                            byline=byline, boring=boring)
         try:
             v.save()
         except models.IntegrityError:
             pass
+
 
 # Begin utility functions
 
@@ -139,8 +140,10 @@ def check_output(*popenargs, **kwargs):
         raise err
     return output
 
+
 if not hasattr(subprocess, 'check_output'):
     subprocess.check_output = check_output
+
 
 def get_hash(version, filename):
     """Return the SHA1 hash of filename in a given version"""
@@ -149,11 +152,12 @@ def get_hash(version, filename):
                                      cwd=models.GIT_DIR)
     return output.split()[2]
 
+
 def remove_duplicates():
     num_articles = models.Article.objects.count()
     for i, article in enumerate(models.Article.objects.all()):
-        if i%100 == 0:
-            print '%s/%s' % (i+1, num_articles)
+        if i % 100 == 0:
+            print '%s/%s' % (i + 1, num_articles)
         filename = article.filename()
         mapping = {}
         versions = article.versions()
@@ -167,12 +171,13 @@ def remove_duplicates():
                 v.boring = True
                 v.save()
 
+
 def mark_boring():
     articles = models.Article.objects.all()
     num_articles = articles.count()
     for i, article in list(enumerate(articles)):
-        if i%100 == 0:
-            print '%s/%s' % (i+1, num_articles)
+        if i % 100 == 0:
+            print '%s/%s' % (i + 1, num_articles)
         versions = list(article.versions())
         if len(versions) < 2:
             continue
@@ -180,7 +185,7 @@ def mark_boring():
         reload = False
         for v, text in texts:
             if text is None:
-                #Inconsistency in database
+                # Inconsistency in database
                 print 'ERROR: deleting', article.url, v.v
                 v.delete()
                 reload = True
@@ -192,6 +197,7 @@ def mark_boring():
                 print 'Boring: %s %s %s' % (article.url, old.v, new.v)
                 new.boring = True
                 new.save()
+
 
 legacy_bad_commit_range = (datetime(2012, 7, 8, 4, 0),
                            datetime(2012, 7, 8, 8, 0))
@@ -208,4 +214,4 @@ dda84ac629f96bfd4cb792dc4db1829e76ad94e5
 """.split()
 
 if __name__ == '__main__':
-    print >>sys.stderr, "Try `python website/manage.py cleanup`."
+    print >> sys.stderr, "Try `python website/manage.py cleanup`."
