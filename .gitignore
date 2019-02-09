@@ -37,3 +37,4 @@ database_settings.py
 /.python-version
 # IntelliJ
 /.idea/
+/venv/
