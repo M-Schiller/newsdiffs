@@ -80,8 +80,8 @@ overwritten each run) and errors to `/tmp/newsdiffs/logging_errs` (which
 is cumulative).
 
 To run the scraper every hour, run something like:
-
- $ while true; do python website/manage.py scraper; sleep 60m; done
+    
+    $ while true; do python website/manage.py scraper; sleep 60m; done
 
 or make a cron job.
 
