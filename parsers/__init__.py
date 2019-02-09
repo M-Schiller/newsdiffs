@@ -12,20 +12,23 @@ nyt.NYTParser
 cnn.CNNParser
 politico.PoliticoParser
 bbc.BBCParser
-washpo.WashPoParser
 """.split()
+
+# washpo.WashPoParser
 
 parser_dict = {}
 
 # Import the parsers and fill in parser_dict: domain -> parser
-for parsername in parsers:
-    module, classname = parsername.rsplit('.', 1)
+for parser_name in parsers:
+    module, classname = parser_name.rsplit('.', 1)
     parser = getattr(__import__(module, globals(), fromlist=[classname]), classname)
     for domain in parser.domains:
         parser_dict[domain] = parser
 
+
 def get_parser(url):
     return parser_dict[url.split('/')[2]]
+
 
 # Each feeder places URLs into the database to be checked periodically.
 
