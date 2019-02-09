@@ -8,10 +8,11 @@ from BeautifulSoup import BeautifulSoup
 import bs4
 import re
 
+
 class PoliticoParser(BaseParser):
     domains = ['www.politico.com']
 
-    feeder_pat   = '^http://www.politico.com/(news/stories|story)/'
+    feeder_pat = '^http://www.politico.com/(news/stories|story)/'
     feeder_pages = ['http://www.politico.com/']
 
     feeder_bs = bs4.BeautifulSoup
@@ -29,10 +30,10 @@ class PoliticoParser(BaseParser):
         self.meta = soup.findAll('meta')
         p_tags = soup.findAll('p')[1:]
         real_p_tags = [p for p in p_tags if
-                       not p.findAll(attrs={'class':"twitter-follow-button"})]
+                       not p.findAll(attrs={'class': "twitter-follow-button"})]
 
         self.title = soup.find('strong').getText()
-        entity = soup.find('span', attrs={'class':'author'})
+        entity = soup.find('span', attrs={'class': 'author'})
         children = list(entity.childGenerator())
         try:
             self.byline = 'By ' + children[1].getText()

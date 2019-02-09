@@ -20,6 +20,7 @@ def test_new_format(mock_grab_url):
     assert len(parser.body.split('\n\n')) == 28
     assert not parser.title.endswith('- The New York Times')
 
+
 @patch('parsers.baseparser.grab_url')
 def test_corrections(mock_grab_url):
     from test_nyt_data import HTML_WITH_CORRECTION

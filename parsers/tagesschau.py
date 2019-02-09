@@ -1,6 +1,7 @@
 from baseparser import BaseParser
 import bs4
 
+
 class TagesschauParser(BaseParser):
     SUFFIX = ''
     domains = ['www.tagesschau.de']
@@ -16,14 +17,14 @@ class TagesschauParser(BaseParser):
             if isinstance(x, bs4.Comment):
                 x.extract()
         # removing elements which don't provide content
-        for selector in ('.inv .teaserImg #seitenanfang .spacer .clearMe '+
-            '.boxMoreLinks .metaBlock .weltatlas .fPlayer .zitatBox .flashaudio').split(' '):
+        for selector in ('.inv .teaserImg #seitenanfang .spacer .clearMe '
+                         + '.boxMoreLinks .metaBlock .weltatlas .fPlayer .zitatBox .flashaudio').split(' '):
             for x in article.select(selector):
                 x.extract()
         # put hrefs into text form cause hrefs are important content
         for x in article.select('a'):
-            x.append(" ["+x.get('href','')+"]")
-        # ensure proper formating for later use of get_text()
+            x.append(" ["+x.get('href', '')+"]")
+        # ensure proper formatting for later use of get_text()
         for x in article.select('li'):
             x.append("\n")
         for tag in 'p h1 h2 h3 h4 h5 ul div'.split(' '):
@@ -42,15 +43,17 @@ class TagesschauParser(BaseParser):
         byline = soup.find('em')
         if byline:
             byline = byline.get_text()
-            if 'Von ' not in byline: byline = None
-        if not byline: byline = "nicht genannt"
+            if 'Von ' not in byline:
+                byline = None
+        if not byline:
+            byline = "nicht genannt"
         self.byline = byline
 
         # TODO self.date is unused, isn't it? but i still fill it here
         date = soup.select("div.standDatum")
         self.date = date and date[0].get_text() or ''
 
-    # XXX a bug in bs4 that tag.descendants isnt working when .extract is called??
+    # XXX a bug in bs4 that tag.descendants isn't working when .extract is called??
     # TODO investigate and report
     @staticmethod
     def descendants(tag):

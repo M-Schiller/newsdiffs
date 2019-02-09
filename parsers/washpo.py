@@ -6,11 +6,12 @@ import dateutil.parser
 
 DATE_FORMAT = '%A, %B %e %Y, %l:%M %p'
 
+
 class WashPoParser(BaseParser):
     SUFFIX = '?print=true'
     domains = ['www.washingtonpost.com']
 
-    feeder_pat   = '^https?://www.washingtonpost.com/.*_story.html|https?://www.washingtonpost.com/.*/wp/.*/'
+    feeder_pat = '^https?://www.washingtonpost.com/.*_story.html|https?://www.washingtonpost.com/.*/wp/.*/'
     feeder_pages = ['http://www.washingtonpost.com/']
 
     def _printableurl(self):
@@ -34,7 +35,7 @@ class WashPoParser(BaseParser):
         else:
             datestr = elt['content']
             if datestr[-2:] == u'00' and datestr[-3] != u':':
-                datestr = datestr[:-2] + u':00' # fix timezone formatting
+                datestr = datestr[:-2] + u':00'  # fix timezone formatting
             date = dateutil.parser.parse(datestr)
             self.date = date.strftime(DATE_FORMAT)
         div = soup.find('article', itemprop='articleBody')
