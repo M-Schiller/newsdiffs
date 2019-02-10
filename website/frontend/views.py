@@ -110,10 +110,11 @@ def get_articles(source=None, distance=0):
 
 SOURCES = \
     '''
-        nytimes.com 
-        cnn.com 
-        politico.com 
+        nytimes.com
+        cnn.com
+        politico.com
         bbc.co.uk
+        diepresse.com
     '''.split()
 
 # washingtonpost.com

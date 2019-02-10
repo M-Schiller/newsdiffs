@@ -8,6 +8,7 @@
 # List of parsers to import and use based on parser.domains
 
 parsers = """
+diePresse.DiePresseParser
 nyt.NYTParser
 cnn.CNNParser
 politico.PoliticoParser
