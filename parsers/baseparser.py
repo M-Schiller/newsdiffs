@@ -166,4 +166,5 @@ class BaseParser(object):
 
             all_urls = all_urls + [url for url in urls if re.search(cls.feeder_pat, url)]
             rejected_urls += [url for url in urls if not re.search(cls.feeder_pat, url)]
+        logger.debug("Rejected URLs" + "\n".join(rejected_urls))
         return all_urls

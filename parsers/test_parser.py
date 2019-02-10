@@ -29,4 +29,5 @@ if url:
     print unicode(parsed_article)
 else:
     links = parser.feed_urls()
+    print "Found", len(links), "links:"
     print '\n'.join(links)
