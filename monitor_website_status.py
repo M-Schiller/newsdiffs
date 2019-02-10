@@ -8,12 +8,13 @@ import dateutil.parser
 import subprocess
 
 WEBSITE = 'http://www.newsdiffs.org/browse/'
-if datetime.now().hour < 8: #Overnight, less frequent updates
+if datetime.now().hour < 8:  # Overnight, less frequent updates
     MAX_TIME = timedelta(minutes=120)
 else:
     MAX_TIME = timedelta(minutes=60)
-    
+
 EMAILS = 'ecprice@mit.edu jenny8lee@gmail.com price@mit.edu'.split()
+
 
 def send_alert_email(subject, body):
     email = 'Subject: %s\n\n%s' % (subject, body)
@@ -37,6 +38,7 @@ def get_update_time():
         raise
     return date
 
+
 if __name__ == '__main__':
     try:
         update_time = get_update_time()
@@ -48,7 +50,7 @@ if __name__ == '__main__':
                              (update_time, time_since_update))
     except Exception, e:
         import traceback
+
         traceback.print_exc()
         send_alert_email('Trouble with newsdiffs.org',
                          'Cannot check website\n%s' % traceback.format_exc())
-

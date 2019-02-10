@@ -10,8 +10,7 @@ class BBCParser(BaseParser):
     feeder_pages = ['http://www.bbc.co.uk/news/']
 
     def _parse(self, html):
-        soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES,
-                             fromEncoding='utf-8')
+        soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES, fromEncoding='utf-8')
 
         self.meta = soup.findAll('meta')
         elt = soup.find('h1', 'story-header')

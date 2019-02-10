@@ -113,7 +113,8 @@ class NYTParser(BaseParser):
         
         if footer:
             p_tags += list(footer.findAll(
-                lambda x: x.get('class') is not None and 'story-print-citation' not in x.get('class') and x.name == 'p'))
+                lambda x:
+                    x.get('class') is not None and 'story-print-citation' not in x.get('class') and x.name == 'p'))
 
         main_body = '\n\n'.join([p.getText() for p in p_tags])
         authorids = soup.find('div', attrs={'class': 'authorIdentification'})
