@@ -108,8 +108,15 @@ def get_articles(source=None, distance=0):
     return articles
 
 
-SOURCES = '''nytimes.com cnn.com politico.com washingtonpost.com
-bbc.co.uk'''.split()
+SOURCES = \
+    '''
+        nytimes.com 
+        cnn.com 
+        politico.com 
+        bbc.co.uk
+    '''.split()
+
+# washingtonpost.com
 
 
 def is_valid_domain(domain):
